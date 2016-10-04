@@ -1,13 +1,12 @@
 import numpy as np
 import os, os.path, sys
+from vsm import VSMClass
 
-class VSM_GenExtract():
+class VSM_GenExtract(VSMClass):
     def __init__(self):
-        self.version = 1.1
-        self.n_args = len(sys.argv) - 1
-        
         self.save_list = []
         self.vhd_list = []
+        super().__init__()
         
         if "-help" in sys.argv or "-h" in sys.argv:
             self.help()
@@ -17,10 +16,10 @@ class VSM_GenExtract():
             print("ERROR: Usage of vsm_generate_extractfile.py:")
             self.help()
             sys.exit()
-        self.get_args()
         self.generate_extract_file()
+        
     def help(self):
-        print("python vsm_generate_extractfile.py extractfile [..]")
+        print("python vsm_generate_extractfile.py [extractfile] [..]")
         print("Possible parameters:")
         print("\t-vhd VHDFILE [VHDFILE2 VHDFILE3 ...]")
         print("\t-save SAVETOFILE [SAVETOFILE2 SAVETOFILE3 ...]")
@@ -52,7 +51,7 @@ class VSM_GenExtract():
     def get_args(self):
         if not sys.argv[1].startswith("-"):
             self.extractname = sys.argv[1]
-            if not "." in extractname:
+            if not "." in self.extractname:
                 self.extractname += ".dat"
         else:
             self.extractname = "extractVSM.dat"
