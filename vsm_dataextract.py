@@ -219,6 +219,11 @@ class VSM_Extract(VSMClass):
         else:
             self.B_unit_factor = self.B_units[self.pdict["B_unit"]]
         
+        print("Desired unit of B: " +self.pdict["B_unit"])
+        self.log_string += "#Desired unit of B: " + self.pdict["B_unit"] + "\n"
+        print("Desired unit of M: " +self.pdict["M_unit"])
+        self.log_string += "#Desired unit of M: " + self.pdict["M_unit"] + "\n"
+
         if not self.pdict["M_unit"] in self.M_units:  # check if M units are known
             sys.exit("Define unit of M.")
         else:
@@ -231,11 +236,8 @@ class VSM_Extract(VSMClass):
                         self.pdict["V"] = float(self.pdict["V"])
                     except ValueError:
                         sys.exit("The entered volume is not a number.")
+                    self.log_string += "#Unit of M needs volume for scale. Volume is set to: " + str(self.pdict["V"]) + "\n"
                     self.M_unit_factor /= (self.pdict["V"]*1e-9)
-        print("Desired unit of B: " +self.pdict["B_unit"])
-        self.log_string += "#Desired unit of B: " + self.pdict["B_unit"] + "\n"
-        print("Desired unit of M: " +self.pdict["M_unit"])
-        self.log_string += "#Desired unit of M: " + self.pdict["M_unit"] + "\n"
         self.log_string += "#Reading column for B: " + self.pdict["B_column"] + "\n"
         self.log_string += "#Reading column for M: " + self.pdict["M_column"] + "\n"
         self.log_string += "#Estimate noise level: " + self.pdict["noise_level"] + " memu\n"
