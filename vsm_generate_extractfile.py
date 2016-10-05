@@ -1,6 +1,7 @@
 import numpy as np
-import os, os.path, sys
+import os, os.path, sys, glob
 from vsm import VSMClass
+from vsm_dataextract import VSM_Extract
 
 class VSM_GenExtract(VSMClass):
     def __init__(self):
@@ -8,23 +9,30 @@ class VSM_GenExtract(VSMClass):
         self.vhd_list = []
         super().__init__()
         
-        if "-help" in sys.argv or "-h" in sys.argv:
-            self.help()
-            sys.exit()
-            
         if self.n_args < 1:
-            print("ERROR: Usage of vsm_generate_extractfile.py:")
-            self.help()
-            sys.exit()
+            print("No VHD files passed as argument. Looking in current folder.")
+            files_ending_on_VHD = glob.glob("*.VHD")
+            if len(files_ending_on_VHD) > 0:
+                print("Found:")
+                for vhd_file in files_ending_on_VHD:
+                    print(vhd_file)
+                    self.vhd_list.append(vhd_file)
+                self.generate_savepaths()
+            else:
+                print("ERROR: Call script in folder with VHD files or pass path "+\
+                      " as argument")
+                self.help()
+                sys.exit()
         self.generate_extract_file()
         
     def help(self):
-        print("python vsm_generate_extractfile.py [extractfile] [..]")
+        print("Usage: python vsm_generate_extractfile.py [extractfile] [..]")
         print("Possible parameters:")
         print("\t-vhd VHDFILE [VHDFILE2 VHDFILE3 ...]")
         print("\t-save SAVETOFILE [SAVETOFILE2 SAVETOFILE3 ...]")
         print("\t-V V \t --\t volume to set ")
-        print("\t-extract \t -- \t Directly perform extraction after generating file.")
+        print("\t-noextract \t -- \t Do not directly perform extraction after "+\
+                                     "generating extraction file.")
         print("")
 
     def get_multiple_args(self, arg):
@@ -47,9 +55,19 @@ class VSM_GenExtract(VSMClass):
                 else:
                     print("Could not find file: " + datafile)
         return filelist
-        
+    
+    def generate_savepaths(self):
+        print("Creating own savefile name proposals.")
+        self.save_list = []
+        for datafile in self.vhd_list:
+            if datafile.endswith("-Hys-00.VHD"):
+                savename = datafile.replace("-Hys-00.VHD", ".xye")
+            else:
+                savename = datafile.rsplit(".",1)[0]+".xye"
+            self.save_list.append(savename)
+    
     def get_args(self):
-        if not sys.argv[1].startswith("-"):
+        if self.n_args > 0 and not sys.argv[1].startswith("-"):
             self.extractname = sys.argv[1]
             if not "." in self.extractname:
                 self.extractname += ".dat"
@@ -81,14 +99,7 @@ class VSM_GenExtract(VSMClass):
                         self.save_list[ifile] += ".xye"
         
         if len(self.vhd_list) > 0 and len(self.vhd_list) != len(self.save_list):
-            print("Creating own savefile name proposals.")
-            self.save_list = []
-            for datafile in self.vhd_list:
-                if datafile.endswith("-Hys-00.VHD"):
-                    savename = datafile.replace("-Hys-00.VHD", ".xye")
-                else:
-                    savename = datafile.rsplit(".",1)[0]+".xye"
-                self.save_list.append(savename)
+            self.generate_savepaths()
                 
         if "-V" in sys.argv:
             self.V = sys.argv[sys.argv.index("-V")+1]
@@ -127,6 +138,10 @@ V		"+self.V+"			#  in mm3 (µL), needed if M_unit is A/m, kA/m, volume of measur
             extract_file.write(vhdfile+"\t\t"+self.save_list[ifile]+"\n")
         extract_file.write("@end data list\n\n")
         extract_file.close()
+        print("Generated file for extraction: " + self.extractname)
+        
+        if not "-noextract" in sys.argv:
+            VSM_Extract(self.extractname)
         
 if __name__ == "__main__":
     VSM_GenExtract()

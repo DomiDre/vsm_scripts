@@ -5,8 +5,9 @@ class VSMClass():
         self.version = 1.1
         self.n_args = len(sys.argv) - 1
         self.get_args()
-        if "-help" in sys.argv:
+        if "-help" in sys.argv or "-h" in sys.argv:
             self.help()
+            sys.exit()
             
     def get_args(self):
         self.arg_dict = {}
