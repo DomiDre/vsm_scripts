@@ -1,5 +1,5 @@
 import numpy as np
-import sys, os, os.path, time
+import sys, os, os.path, time, glob
 from vsm import VSMClass
 
 class VSM_GenExtract(VSMClass):
@@ -138,7 +138,7 @@ V		"+self.V+"			#  in mm3 (µL), needed if M_unit is A/m, kA/m, volume of measur
         extract_file.close()
         print("Generated file for extraction: " + self.extractname)
         
-        if not "-noextract" in sys.argv:
+        if not "-generate" in sys.argv:
             VSM_Extract(self.extractname)
 
 
@@ -154,7 +154,7 @@ class VSM_Extract(VSMClass):
         if self.n_args < 1 and filepath is None:
             print("Give path to file containing parameters for VSM "+\
                   "data extraction as argument.")
-            print("Usage of vsm_dataextract.py:")
+            print("Usage of vsm_dataextract.py for data extraction:")
             self.help()
             sys.exit()
         if filepath is not None:
@@ -174,8 +174,8 @@ class VSM_Extract(VSMClass):
         print("")
 
     def get_args(self):
-        if self.n_args > 0:
-            self.filepath = sys.argv[1]
+        if "-extract" in sys.argv:
+            self.filepath = sys.argv[sys.argv.index("-extract") + 1]
 
     def load_param_file(self):
         self.pdict = {}
@@ -278,7 +278,7 @@ class VSM_Extract(VSMClass):
         self.data_string += "#Unit of M in data: " + M_rawunit + "\n"
         m_change_factor = self.M_unit_factor / self.M_units[M_rawunit]
         if not np.allclose(m_change_factor, 1):
-    ö        self.data_string += "#Changing unit by multiplying with factor: " + str(m_change_factor) + "\n"
+            self.data_string += "#Changing unit by multiplying with factor: " + str(m_change_factor) + "\n"
         M = M_raw * self.M_unit_factor / self.M_units[M_rawunit]
         
         # image correct M_values
@@ -417,9 +417,7 @@ class VSM_Extract(VSMClass):
 
 
 if __name__ == "__main__":
-    if "-generate" in sys.argv:
-        VSM_GenExtract()
-    elif "-extract" in sys.argv:
+    if "-extract" in sys.argv:
         VSM_Extract()
     else:
         VSM_GenExtract()
