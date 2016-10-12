@@ -244,8 +244,8 @@ class VSM_Extract(VSMClass):
     
         for samplepair in self.samplelist:
             self.data_string = "#Loading data from file: " + samplepair[0] + "\n"
-            self.data_string = "#Save data to file: " + samplepair[1] + "\n"
-            self.data_string = "#Extraction performed at: " +  time.strftime("%c") + "\n"
+            self.data_string += "#Save data to file: " + samplepair[1] + "\n"
+            self.data_string += "#Extraction performed at: " +  time.strftime("%c") + "\n"
             
             B, M, sM, M_raw, sM_raw, M_rawunit, B_imagecorr, imagecorr_factor =\
                         self.load_data(samplepair[0]) # Load Data

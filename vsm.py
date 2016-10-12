@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 
 class VSMClass():
     def __init__(self):
@@ -26,3 +27,47 @@ class VSMClass():
                 
     def help(self):
         print("Help is not defined.")
+        
+    def load_xye_vsmfile(self, filepath):
+        datafile = open(filepath, "r")
+        B = []
+        M = []
+        sM = []
+        Mraw = []
+        sMraw = []
+        header = ""
+        self.Bunit = ""
+        self.Munit = ""
+        last_line = ""
+        loading_header = True
+        for line in datafile:
+            if loading_header:
+                header += last_line
+                last_line = line
+            
+            if line.startswith('#B') or line.startswith('# B'):
+                loading_header = False
+                split_line = line.strip().split("#")[1].split("\t")
+                for element in split_line:
+                    if "B /" in element:
+                        self.Bunit = element.split("/")[1]
+                    elif "M /" in element:
+                        self.Munit = element.split("/")[1]
+                continue
+            
+            if line.startswith("#") or line.strip() == "":
+                continue
+            
+            loading_header = False
+            splitline = line.strip().split()
+            B.append(float(splitline[0]))
+            M.append(float(splitline[1]))
+            sM.append(float(splitline[2]))
+            Mraw.append(float(splitline[3]))
+            sMraw.append(float(splitline[4]))
+        self.B = np.asarray(B)
+        self.M = np.asarray(M)
+        self.sM = np.asarray(sM)
+        self.Mraw = np.asarray(Mraw)
+        self.sMraw = np.asarray(sMraw)
+        self.header = header
