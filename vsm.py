@@ -49,10 +49,14 @@ class VSMClass():
                 loading_header = False
                 split_line = line.strip().split("#")[1].split("\t")
                 for element in split_line:
-                    if "B /" in element:
-                        self.Bunit = element.split("/")[1]
-                    elif "M /" in element:
-                        self.Munit = element.split("/")[1]
+                    if "B /" in element or "B_sub /" in element or "B_res /" in element:
+                        self.Bunit = element.split("/")[1].strip()
+                    elif "M /" in element or "M_sub /" in element or "B_res /" in element:
+                        self.Munit = element.split("/")[1].strip()
+                    elif "B_raw /" in element:
+                        self.Brawunit = element.split("/")[1].strip()
+                    elif "M_raw /" in element:
+                        self.Mrawunit = element.split("/")[1].strip()
                 continue
             
             if line.startswith("#") or line.strip() == "":
@@ -63,8 +67,8 @@ class VSMClass():
             B.append(float(splitline[0]))
             M.append(float(splitline[1]))
             sM.append(float(splitline[2]))
-            Mraw.append(float(splitline[3]))
-            sMraw.append(float(splitline[4]))
+            Mraw.append(float(splitline[-2]))
+            sMraw.append(float(splitline[-1]))
         self.B = np.asarray(B)
         self.M = np.asarray(M)
         self.sM = np.asarray(sM)

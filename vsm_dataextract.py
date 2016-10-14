@@ -258,7 +258,7 @@ class VSM_Extract(VSMClass):
             save_data.write(self.data_string)
             
             save_data.write("\n#B / "+self.pdict["B_unit"]+"\tM / "+self.pdict["M_unit"] +\
-                    "\tsM / "+self.pdict["M_unit"]+"\tMraw / "+M_rawunit +"\tsMraw / "+\
+                    "\tsM / "+self.pdict["M_unit"]+"\tM_raw / "+M_rawunit +"\tsM_raw / "+\
                     M_rawunit + "\n")
                     
             for i, bval in enumerate(B):
