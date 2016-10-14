@@ -10,8 +10,11 @@ class VSM_Substract(VSMClass):
         self.load_xye_vsmfile(self.sample_path)
         
         if self.substract_pbp:
-            self.substract_data()
-            self.
+            self.load_bg()
+            self.substract_ptbypt()
+            self.save_to_file_ptbypt()
+            self.plot_substraction_ptbypt()
+            sys.exit("Working on that mode.")
         else:
             self.substract_linear()
             self.save_to_file_linear_substraction()
@@ -34,12 +37,23 @@ class VSM_Substract(VSMClass):
                 print("WARNING: Check whether signal and background have been "+\
                       "measured with the same magnetic field steps.")
                       
-    def substract_data(self, B1, M1, sM1, B2, M2, sM2, sf):
-        self.compare_B_values(B1, B2)
-        B = B1
-        M = M1 - sf*M2
-        sM = np.sqrt(sM1**2 + sf**2*sM2**2)
-        return B, M, sM
+    def load_bg(self):
+        pass
+        #load : self.bg_path
+#        self.B_bg = 
+#        self.M_bg =
+#        self.sM_bg =
+        
+    def substract_ptbypt(self):
+        self.compare_B_values(self.B, self.B_bg)
+        self.M_sub = self.M - self.sf*self.M_bg
+        self.sM_sub = np.sqrt(self.sM**2 + (self.sf*self.sM_bg)**2)
+        
+    def save_to_file_ptbypt(self):
+        pass
+        
+    def plot_substraction_ptbypt(self):
+        pass
         
     def save_to_file_linear_substraction(self):
         save_data = open(self.save_to, "w")
