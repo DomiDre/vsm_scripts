@@ -21,7 +21,11 @@ class CFMS():
         
         print("\nFor more professional usage: generate class and use "+\
               "provided class members to load/manipulate CFMS data:")
-        print(inspect.getmembers(CFMS, predicate=inspect.ismethod))
+        method_list = [func for func in dir(CFMS) if callable(getattr(CFMS, func))\
+                    and not func.startswith("__")]
+        
+        for method in method_list:
+            print(method)
         
     def load(self, datfile):
         self.data_loaded = True
