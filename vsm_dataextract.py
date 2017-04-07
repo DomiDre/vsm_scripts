@@ -107,6 +107,11 @@ class VSM_GenExtract(VSMClass):
             self.munit ="memu"
 
     def generate_extract_file(self):
+        if os.path.isfile(self.extractname):
+            overwrite = input("You are about to overwrite: " +\
+                            str(self.extractname) + ". Continue? [N]")
+            if not overwrite in ["Y", "y", "yes", "YES", "Yes", "j", "J"]:
+                sys.exit("Aborted.")
         extract_file = open(self.extractname, "w")
         extract_file.write(\
 "# Use this file to give parameters to vsm_dataextract.py\n\
@@ -140,10 +145,6 @@ V		"+self.V+"			#  in mm3 (µL), needed if M_unit is A/m, kA/m, volume of measur
         
         if not "-generate" in sys.argv:
             VSM_Extract(self.extractname)
-
-
-
-
 
 
 

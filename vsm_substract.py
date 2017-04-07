@@ -149,7 +149,7 @@ class VSM_Substract(VSMClass):
         if self.plot_path.startswith("/"):
             self.plot_path = "." + self.plot_path
 
-        self.save_to = head + "/" + self.pre + "_"+self.suffix+".xy"
+        self.save_to = head + "/" + self.pre + "_"+self.suffix+".xye"
         
         if self.save_to.startswith("/"):
             self.save_to = "." + self.save_to
