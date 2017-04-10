@@ -158,6 +158,14 @@ def plot_xye(x, y, sy, ymodel, plot_slice, ax, linecolor=None, linestyle="None",
         linecolor = sys.argv[sys.argv.index("-linecolor")+1]
     elif "-lc" in sys.argv:
         linecolor = sys.argv[sys.argv.index("-lc")+1]
+    
+    if "-nv" in sys.argv:
+        #Assuming all symmetric measurements find virgin curve and remove it
+        virgin = round(len(x_plot)/5 , 0) 
+        virgin = int(virgin)
+        x_plot = x_plot[virgin:-1]
+        y_plot = y_plot[virgin:-1]
+        sy_plot = sy_plot[virgin:-1]
 
     if len(x_exc) > 0:
         if sy is None:
@@ -204,6 +212,7 @@ if __name__ == "__main__":
         print("-model \t -- \t Plot model.")
         print("-save savename \t -- \t Save to savename")
         print("-vsm \t -- Plot VSM Data")
+        print("-nv \t -- No Virgin curve")
         sys.exit()
         
     # Initialization:
