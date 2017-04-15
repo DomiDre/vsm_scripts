@@ -163,9 +163,9 @@ def plot_xye(x, y, sy, ymodel, plot_slice, ax, linecolor=None, linestyle="None",
         #Assuming all symmetric measurements find virgin curve and remove it
         virgin = round(len(x_plot)/5 , 0) 
         virgin = int(virgin)
-        x_plot = x_plot[virgin:-1]
-        y_plot = y_plot[virgin:-1]
-        sy_plot = sy_plot[virgin:-1]
+        x_plot = x_plot[virgin:]
+        y_plot = y_plot[virgin:]
+        sy_plot = sy_plot[virgin:]
 
     if len(x_exc) > 0:
         if sy is None:
