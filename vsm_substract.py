@@ -124,7 +124,17 @@ class VSM_Substract(VSMClass):
         save_data.write("#Substracted file: " +self.sample_path+"\n")
         save_data.write("#Background file: " + str(self.bg_path) + "\n")
         save_data.write("#BG Scalefactor: " + str(self.sf) + "\n")
+        save_data.write('\n\n\n#Raw Background data:\n')
+        save_data.write("#B_bg / "+self.Bunit+\
+                        "\tM_bg / "+self.Munit+\
+                        "\tsM_bg / "+ self.Munit+"\n")
+        for i, bval in enumerate(self.B_bg):
+            save_data.write('#'+str(bval)+"\t"+\
+                            str(self.M_bg[i])+"\t"+\
+                            str(self.sM_bg[i])+"\n")
+        save_data.write('\n\n')
         
+
         save_data.write("#B / "+self.Bunit+\
                         "\tM_sub / "+self.Munit+\
                         "\tsM_sub / "+ self.Munit+\
@@ -144,6 +154,7 @@ class VSM_Substract(VSMClass):
                             str(self.sMinterpolated[i])+"\t"+\
                             str(self.Mraw[i])+"\t"+\
                             str(self.sMraw[i])+"\n")
+
         save_data.close()
 
     def plot_substraction_ptbypt(self):
