@@ -38,11 +38,11 @@ class VSM_Substract(VSMClass):
                       "measured with the same magnetic field steps.")
                       
     def load_bg(self):
-        pass
+        B, M, sM, Mraw, sMraw, header = self.get_data_from_file(self.bg_path)
         #load : self.bg_path
-#        self.B_bg = 
-#        self.M_bg =
-#        self.sM_bg =
+        self.B_bg = B 
+        self.M_bg = M
+        self.sM_bg = sM
         
     def substract_ptbypt(self):
         self.compare_B_values(self.B, self.B_bg)

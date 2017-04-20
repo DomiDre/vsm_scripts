@@ -27,8 +27,8 @@ class VSMClass():
                 
     def help(self):
         print("Help is not defined.")
-        
-    def load_xye_vsmfile(self, filepath):
+    
+    def get_data_from_file(self, filepath):
         datafile = open(filepath, "r")
         B = []
         M = []
@@ -69,6 +69,10 @@ class VSMClass():
             sM.append(float(splitline[2]))
             Mraw.append(float(splitline[-2]))
             sMraw.append(float(splitline[-1]))
+        return B, M, sM, Mraw, sMraw, header
+    
+    def load_xye_vsmfile(self, filepath):
+        B, M, sM, Mraw, sMraw, header = self.get_data_from_file(filepath)
         self.B = np.asarray(B)
         self.M = np.asarray(M)
         self.sM = np.asarray(sM)
